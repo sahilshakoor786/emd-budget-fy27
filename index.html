@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>EMD Budget FY 2026-27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500&display=swap">
+<style>
+/* Theme tokens: neutral steel greys; series = actual (teal), open PO (amber), open PR (slate violet) */
+:root {
+  color-scheme: light;
+  --color-bg: #f5f6f7; --color-panel: #ffffff; --color-fg: #1b2228; --color-fg-muted: #5c6670; --color-border-line: #dde1e5;
+  --color-ok: #2f7d4f; --color-warn: #a86a00; --color-bad: #b3261e;
+  --s1: #1f6f78; --s2: #d08c2a; --s3: #7a6fb0; --s4: #4d7cbf; --s5: #9a5c3a; --s6: #3f8f6b; --s7: #b0577e; --s8: #6b7a88;
+  --cds-chart-grid: #e7eaed; --cds-chart-axis: #9aa3ab; --cds-chart-muted: #c3c9cf; --cds-chart-status-critical: #c8473d; --cds-chart-reference: #8a939b;
+  --cds-surface-popover: #ffffff; --cds-border: #d4d9de; --cds-shadow-popover: 0 6px 20px rgba(20, 30, 40, .14); --cds-text-secondary: #5c6670;
+  --font-anthropic-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-anthropic-serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --font-anthropic-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --cds-font-size-caption: .8125rem; --cds-font-size-body: .9375rem; --cds-font-size-heading: 1.0625rem; --cds-font-size-title: 1.75rem;
+  --cds-font-weight-medium: 500;
+  --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 16px; --cds-gap-lg: 24px; --cds-gap-xl: 40px;
+  --cds-pad-xs: 4px; --cds-pad-sm: 8px; --cds-pad-md: 14px; --cds-pad-lg: 20px; --cds-pad-xl: 32px;
+  --cds-radius: 6px; --cds-dur-slow: 300ms;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg: #12161a; --color-panel: #1a2026; --color-fg: #e6e9ec; --color-fg-muted: #9aa4ad; --color-border-line: #2c343c;
+    --color-ok: #6fcf97; --color-warn: #f0b44c; --color-bad: #ff7a70;
+    --s1: #4fb3bd; --s2: #f0aa48; --s3: #a59ae0; --s4: #7aa7e8; --s5: #d08a62; --s6: #6cc39b; --s7: #e086ad; --s8: #9aa8b5;
+    --cds-chart-grid: #262e35; --cds-chart-axis: #5d6872; --cds-chart-muted: #47515b; --cds-chart-status-critical: #ff7a70; --cds-chart-reference: #7d8892;
+    --cds-surface-popover: #222a31; --cds-border: #36404a; --cds-shadow-popover: 0 6px 20px rgba(0, 0, 0, .45); --cds-text-secondary: #9aa4ad;
+  }
+}
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); font-size: 14px; }
+#dash-root { padding-block: 28px 48px; padding-left: max(var(--dash-gutter, 16px), env(safe-area-inset-left, 0px)); padding-right: max(var(--dash-gutter, 16px), env(safe-area-inset-right, 0px)); }
+.emd-btn { font: inherit; font-size: var(--cds-font-size-caption); padding: 6px 12px; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-panel); color: var(--color-fg); cursor: pointer; }
+.emd-btn:hover { border-color: var(--color-fg-muted); }
+.emd-btn:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.emd .emd-take b { font-weight: 600; }
+</style>
+<script src="vendor/d3.min.js"></script>
+<script src="runtime.js"></script>
+<style>
+#dash-root { --dash-gutter: clamp(16px, 3vw, 40px); }
+.emd { display: flex; flex-direction: column; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); color: var(--color-fg); max-width: 1400px; margin-inline: auto; }
+.emd-head { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+.emd-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.emd-meta { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; letter-spacing: .01em; }
+.emd-take { font-size: var(--cds-font-size-body); margin: var(--cds-gap-xs) 0 0; max-width: 75ch; line-height: 1.55; }
+.emd .emd-take b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.emd-tabs { display: flex; gap: var(--cds-gap-xs); flex-wrap: wrap; border-bottom: 1px solid var(--color-border-line); }
+.emd-tab { font: inherit; font-size: var(--cds-font-size-body); background: none; border: 0; border-bottom: 2px solid transparent; color: var(--color-fg-muted); padding: var(--cds-pad-sm) var(--cds-pad-md); cursor: pointer; margin-bottom: -1px; }
+.emd-tab[aria-selected="true"] { color: var(--color-fg); border-bottom-color: var(--color-fg); font-weight: 500; }
+.emd-tab:focus-visible, .emd-sort:focus-visible, .emd-input:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.emd-page { display: flex; flex-direction: column; gap: var(--cds-gap-lg); }
+.emd-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: var(--cds-gap-md); }
+.emd-kpi { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+.emd-kpi-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .02em; }
+.emd-kpi-value { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; line-height: 1.15; }
+.emd-kpi-sub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.emd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); gap: var(--cds-gap-md); }
+.emd-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+.emd-card h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+.emd-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; line-height: 1.5; }
+.emd-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; padding: 0; list-style: none; }
+.emd-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.emd-sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.emd-chart { position: relative; min-height: 40px; }
+.emd-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); z-index: 5; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.emd-tip-h { color: var(--cds-text-secondary); margin-bottom: 2px; }
+.emd-tip-r { display: flex; align-items: center; gap: 6px; }
+.emd-rows { display: flex; flex-direction: column; gap: 10px; }
+.emd-row { display: grid; grid-template-columns: minmax(7rem, 13rem) 1fr minmax(5.5rem, auto); align-items: center; gap: var(--cds-gap-sm); font-size: var(--cds-font-size-caption); }
+.emd-row-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.emd-row-val { text-align: right; font-variant-numeric: tabular-nums; color: var(--color-fg-muted); white-space: nowrap; }
+.emd-row-val b { color: var(--color-fg); font-weight: 600; }
+.emd-track { display: flex; height: 14px; border-radius: 3px; overflow: hidden; background: var(--cds-chart-grid); }
+.emd-seg { height: 100%; }
+.emd-stack { display: flex; height: 28px; border-radius: var(--cds-radius); overflow: hidden; background: var(--cds-chart-grid); }
+.emd-stack-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); gap: var(--cds-gap-sm); }
+.emd-stack-item { display: flex; flex-direction: column; gap: 2px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.emd-stack-item strong { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-heading); color: var(--color-fg); font-variant-numeric: tabular-nums; }
+.emd-tools { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-items: center; }
+.emd-input { font: inherit; font-size: var(--cds-font-size-caption); padding: 6px 10px; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-bg); color: var(--color-fg); min-width: 0; }
+.emd-input[type="search"] { flex: 1 1 14rem; }
+.emd-count { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.emd-tablebox { overflow: auto; max-height: 34rem; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
+.emd-tablebox.short { max-height: none; }
+.emd-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.emd-table th { position: sticky; top: 0; background: var(--color-panel); text-align: left; font-weight: 500; color: var(--color-fg-muted); border-bottom: 1px solid var(--color-border-line); padding: 0; white-space: nowrap; z-index: 1; }
+.emd-table th.num, .emd-table td.num { text-align: right; }
+.emd-sort { font: inherit; color: inherit; background: none; border: 0; padding: 8px 10px; cursor: pointer; width: 100%; text-align: inherit; }
+.emd-sort::after { content: ""; margin-left: 4px; }
+th[aria-sort="ascending"] .emd-sort::after { content: "▲"; font-size: .7em; }
+th[aria-sort="descending"] .emd-sort::after { content: "▼"; font-size: .7em; }
+.emd-table td { padding: 7px 10px; border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+.emd-table tr:last-child td { border-bottom: 0; }
+.emd-table td.wrap { min-width: 14rem; }
+.emd-table td.mono { font-family: var(--font-anthropic-mono, ui-monospace, monospace); }
+.emd-neg { color: var(--color-bad); }
+.emd-chip { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: var(--cds-font-size-caption); border: 1px solid currentColor; white-space: nowrap; }
+.emd-chip.bad { color: var(--color-bad); }
+.emd-chip.warn { color: var(--color-warn); }
+.emd-chip.ok { color: var(--color-ok); }
+.emd-ubar { display: flex; align-items: center; gap: 8px; min-width: 8rem; }
+.emd-ubar-track { flex: 1; height: 8px; background: var(--cds-chart-grid); border-radius: 3px; overflow: hidden; }
+.emd-ubar-fill { height: 100%; border-radius: 3px; }
+.emd-svg text { fill: var(--color-fg-muted); font-size: 11px; font-family: var(--font-anthropic-sans); }
+.emd-foot { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.6; margin: 0; max-width: 90ch; }
+.emd-defs { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 4px var(--cds-gap-md); font-size: var(--cds-font-size-caption); }
+.emd-defs dt { font-weight: 500; }
+.emd-defs dd { margin: 0; color: var(--color-fg-muted); }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+@media (max-width: 560px) { .emd-row { grid-template-columns: 1fr minmax(4.5rem, auto); } .emd-row .emd-track { grid-column: 1 / -1; grid-row: 2; } .emd-defs { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div id="dash-root">
+<div class="emd">
+  <header class="emd-head" id="top">
+    <h1 class="emd-title">EMD budget, FY 2026-27</h1>
+    <p class="emd-meta">Funds centre 135080 (Dol-EMC-Common) · Fund DOLVI · FM area 1000 · Control ledger 9H · SAP snapshot taken 28 Oct 2026, periods 1–7 (Apr–Oct)</p>
+    <p class="emd-take">
+      <b data-draw="t-consumed" data-source="totals" data-field="consumed">—</b> of the <b data-draw="t-budget" data-source="totals" data-field="budget">—</b> budget is consumed (<b data-draw="t-util" data-source="totals" data-field="utilised">—</b>), leaving <b data-draw="t-avail" data-source="totals" data-field="available">—</b>.
+      Only <b data-draw="t-actual-share" data-source="totals" data-field="actual_share">—</b> of the budget is actually booked; the rest of the consumption is open POs and PRs.
+      <b data-draw="t-tight" data-source="totals" data-field="items_at_90">—</b> of <b data-draw="t-nitems" data-source="totals" data-field="items">—</b> commitment items are at 90% or more, and most headroom left is in <b data-draw="t-top" data-source="totals" data-field="most_headroom_item">—</b>.
+    </p>
+  </header>
+
+  <nav class="emd-tabs" role="tablist" aria-label="Dashboard pages">
+    <button class="emd-tab" role="tab" data-tab="overview" aria-selected="true">Overview</button>
+    <button class="emd-tab" role="tab" data-tab="items" aria-selected="false">Commitment items</button>
+    <button class="emd-tab" role="tab" data-tab="open-orders" aria-selected="false">Open POs &amp; PRs</button>
+    <button class="emd-tab" role="tab" data-tab="vendors" aria-selected="false">Vendors</button>
+    <button class="emd-tab" role="tab" data-tab="register" aria-selected="false">Transaction register</button>
+  </nav>
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <section class="emd-page" id="overview">
+    <div class="emd-kpis" id="kpis">
+      <div class="emd-kpi"><span class="emd-kpi-label">Budget (consumable)</span><span class="emd-kpi-value" data-draw="k-budget" data-source="totals" data-field="budget">—</span><span class="emd-kpi-sub">FY 2026-27 release</span></div>
+      <div class="emd-kpi"><span class="emd-kpi-label">Consumed</span><span class="emd-kpi-value" data-draw="k-consumed" data-source="totals" data-field="consumed">—</span><span class="emd-kpi-sub"><span data-draw="k-consumed-s" data-source="totals" data-field="utilised">—</span> of budget</span></div>
+      <div class="emd-kpi"><span class="emd-kpi-label">Available</span><span class="emd-kpi-value" data-draw="k-avail" data-source="totals" data-field="available">—</span><span class="emd-kpi-sub"><span data-draw="k-avail-s" data-source="totals" data-field="available_share">—</span> of budget</span></div>
+      <div class="emd-kpi"><span class="emd-kpi-label">Actuals booked (GR / invoice)</span><span class="emd-kpi-value" data-draw="k-actual" data-source="totals" data-field="actual">—</span><span class="emd-kpi-sub"><span data-draw="k-actual-s" data-source="totals" data-field="actual_share">—</span> of budget</span></div>
+      <div class="emd-kpi"><span class="emd-kpi-label">Open PO commitment</span><span class="emd-kpi-value" data-draw="k-po" data-source="totals" data-field="open_po">—</span><span class="emd-kpi-sub"><span data-draw="k-po-n" data-source="po_aging">—</span> POs still open</span></div>
+      <div class="emd-kpi"><span class="emd-kpi-label">Open PR earmark</span><span class="emd-kpi-value" data-draw="k-pr" data-source="totals" data-field="open_pr">—</span><span class="emd-kpi-sub"><span data-draw="k-pr-n" data-source="pr_aging">—</span> PRs not yet on PO</span></div>
+    </div>
+
+    <div class="emd-card" id="composition-card">
+      <h2>Where the ₹ budget stands today</h2>
+      <p class="emd-note">Consumed = actuals booked + open PO commitments + open PR earmarks (SAP FM availability control). Hover a segment for its value.</p>
+      <div class="emd-chart" data-draw="composition" data-source="totals"></div>
+    </div>
+
+    <div class="emd-grid">
+      <div class="emd-card" id="items-chart-card">
+        <h2>Consumption by commitment item</h2>
+        <p class="emd-note">Each bar is that item's own budget (100%), split by stage. Sorted by budget size.</p>
+        <ul class="emd-legend" data-draw="stage-legend"></ul>
+        <div class="emd-chart" data-draw="items-bars" data-source="budget_items"></div>
+      </div>
+      <div class="emd-card" id="monthly-card">
+        <h2>Month-wise activity, Apr–Oct 2026</h2>
+        <p class="emd-note">Actuals booked are net FM postings of goods receipts and invoices in the month. New PR / PO value is each document line's first posting in the month it was created.</p>
+        <ul class="emd-legend" data-draw="month-legend"></ul>
+        <div class="emd-chart" data-draw="monthly" data-source="monthly"></div>
+      </div>
+    </div>
+
+    <div class="emd-grid">
+      <div class="emd-card" id="carry-card">
+        <h2>Carried forward from FY 2025-26 vs. fresh this year</h2>
+        <p class="emd-note">Commitments open on 31 Mar 2026 were carried into this year's budget (amount type 0350) and are consuming it now, together with what they later turned into (POs, GRs, invoices).</p>
+        <div class="emd-chart" data-draw="carry" data-source="totals"></div>
+      </div>
+      <div class="emd-card" id="flags-card">
+        <h2>Items to watch</h2>
+        <p class="emd-note">Commitment items ranked by utilisation, with the money left in each. <span data-draw="thr-note">—</span></p>
+        <div class="emd-tablebox short">
+          <table class="emd-table" data-source="item_status" data-row-key="commitment_item">
+            <thead><tr><th data-field="commitment_item"><span class="emd-sort">Commitment item</span></th><th data-field="utilised"><span class="emd-sort">Utilised</span></th><th class="num" data-field="available"><span class="emd-sort">Available (₹ lakh)</span></th><th data-field="status"><span class="emd-sort">Status</span></th></tr></thead>
+            <tbody data-draw="watch-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ITEMS ===================== -->
+  <section class="emd-page" id="items" hidden>
+    <div class="emd-card">
+      <h2>Commitment item summary</h2>
+      <p class="emd-note">All amounts in ₹ lakh. Budget, consumed and available match FMAVCR01 for fund centre 135080; the actual / PO / PR split is summed from each item's document journal and reconciles to the consumed figure to the paisa.</p>
+      <div class="emd-tablebox short">
+        <table class="emd-table" data-source="item_status" data-row-key="commitment_item" id="items-table">
+          <thead><tr>
+            <th data-field="commitment_item"><button class="emd-sort" data-t="items" data-k="commitment_item">Commitment item</button></th>
+            <th class="num" data-field="budget"><button class="emd-sort" data-t="items" data-k="budget">Budget</button></th>
+            <th class="num" data-field="consumed"><button class="emd-sort" data-t="items" data-k="consumed">Consumed</button></th>
+            <th class="num" data-field="available"><button class="emd-sort" data-t="items" data-k="available">Available</button></th>
+            <th data-field="utilised"><button class="emd-sort" data-t="items" data-k="utilised">Utilised</button></th>
+            <th class="num" data-field="actual"><button class="emd-sort" data-t="items" data-k="actual">Actual booked</button></th>
+            <th class="num" data-field="open_po"><button class="emd-sort" data-t="items" data-k="open_po">Open PO</button></th>
+            <th class="num" data-field="open_pr"><button class="emd-sort" data-t="items" data-k="open_pr">Open PR</button></th>
+            <th class="num" data-field="carried_forward"><button class="emd-sort" data-t="items" data-k="carried_forward">From FY25 carry-fwd</button></th>
+            <th data-field="status"><button class="emd-sort" data-t="items" data-k="status">Status</button></th>
+          </tr></thead>
+          <tbody data-draw="items-rows"></tbody>
+          <tfoot data-draw="items-foot" data-source="totals"></tfoot>
+        </table>
+      </div>
+    </div>
+    <div class="emd-card">
+      <h2>How to read the stages</h2>
+      <dl class="emd-defs">
+        <dt>Open PR earmark</dt><dd>Value of purchase requisitions released against the budget but not yet converted to a PO (value type 50).</dd>
+        <dt>Open PO commitment</dt><dd>PO value not yet received or invoiced (value type 51). It drops as GRs and invoices are posted.</dd>
+        <dt>Actuals booked</dt><dd>Goods receipts awaiting invoice plus invoices posted through MIRO or FI (value type 54). This is spend already incurred.</dd>
+        <dt>Carry-forward</dt><dd>Open FY 2025-26 PRs and POs moved into this year on 1 Apr 2026, and every follow-on posting against them.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===================== OPEN POs & PRs ===================== -->
+  <section class="emd-page" id="open-orders" hidden>
+    <div class="emd-grid">
+      <div class="emd-card" id="po-aging-card">
+        <h2>Open PO value by age</h2>
+        <p class="emd-note">Age counted from the PO document date to 28 Oct 2026.</p>
+        <div class="emd-chart" data-draw="po-aging" data-source="po_aging"></div>
+      </div>
+      <div class="emd-card" id="pr-aging-card">
+        <h2>Open PR value by age</h2>
+        <p class="emd-note">Age counted from the PR document date to 28 Oct 2026. PRs over 90 days are the follow-up list for buyers.</p>
+        <div class="emd-chart" data-draw="pr-aging" data-source="pr_aging"></div>
+      </div>
+    </div>
+
+    <div class="emd-card" id="po-table-card">
+      <h2>Open purchase orders</h2>
+      <p class="emd-note">POs with an open commitment against fund centre 135080. Values in ₹ lakh.</p>
+      <div class="emd-tools">
+        <input class="emd-input" type="search" id="po-q" data-q="po" placeholder="Search PO, vendor, item, text" aria-label="Search open POs">
+        <span class="emd-count" data-draw="po-count" data-source="open_pos">—</span>
+      </div>
+      <div class="emd-tablebox">
+        <table class="emd-table" data-source="open_pos" data-row-key="po_number">
+          <thead><tr>
+            <th data-field="po_number"><button class="emd-sort" data-t="po" data-k="po_number">PO</button></th>
+            <th data-field="vendor"><button class="emd-sort" data-t="po" data-k="vendor">Vendor</button></th>
+            <th data-field="commitment_item"><button class="emd-sort" data-t="po" data-k="commitment_item">Commitment item</button></th>
+            <th data-field="description"><button class="emd-sort" data-t="po" data-k="description">Short text</button></th>
+            <th data-field="doc_date"><button class="emd-sort" data-t="po" data-k="doc_date">PO date</button></th>
+            <th class="num" data-field="age_days"><button class="emd-sort" data-t="po" data-k="age_days">Age (days)</button></th>
+            <th class="num" data-field="open_value"><button class="emd-sort" data-t="po" data-k="open_value">Open value</button></th>
+            <th data-field="carried_from_fy25"><button class="emd-sort" data-t="po" data-k="carried_from_fy25">From FY25</button></th>
+          </tr></thead>
+          <tbody data-draw="po-rows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="emd-card" id="pr-table-card">
+      <h2>Open purchase requisitions</h2>
+      <p class="emd-note">PRs still holding budget that have not been converted to a PO. Values in ₹ lakh.</p>
+      <div class="emd-tools">
+        <input class="emd-input" type="search" id="pr-q" data-q="pr" placeholder="Search PR, item, text" aria-label="Search open PRs">
+        <span class="emd-count" data-draw="pr-count" data-source="open_prs">—</span>
+      </div>
+      <div class="emd-tablebox">
+        <table class="emd-table" data-source="open_prs" data-row-key="pr_number">
+          <thead><tr>
+            <th data-field="pr_number"><button class="emd-sort" data-t="pr" data-k="pr_number">PR</button></th>
+            <th data-field="commitment_item"><button class="emd-sort" data-t="pr" data-k="commitment_item">Commitment item</button></th>
+            <th data-field="description"><button class="emd-sort" data-t="pr" data-k="description">Short text</button></th>
+            <th data-field="doc_date"><button class="emd-sort" data-t="pr" data-k="doc_date">PR date</button></th>
+            <th class="num" data-field="age_days"><button class="emd-sort" data-t="pr" data-k="age_days">Age (days)</button></th>
+            <th class="num" data-field="open_value"><button class="emd-sort" data-t="pr" data-k="open_value">Open value</button></th>
+            <th data-field="carried_from_fy25"><button class="emd-sort" data-t="pr" data-k="carried_from_fy25">From FY25</button></th>
+          </tr></thead>
+          <tbody data-draw="pr-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== VENDORS ===================== -->
+  <section class="emd-page" id="vendors" hidden>
+    <div class="emd-card" id="vendor-chart-card">
+      <h2>Top 15 vendors by money against this budget</h2>
+      <p class="emd-note">Actuals booked plus open PO value, FY 2026-27 to date.</p>
+      <ul class="emd-legend" data-draw="vendor-legend"></ul>
+      <div class="emd-chart" data-draw="vendor-bars" data-source="vendors"></div>
+    </div>
+    <div class="emd-card" id="vendor-table-card">
+      <h2>All vendors</h2>
+      <p class="emd-note">Values in ₹ lakh. A negative actual is a reversal or credit that exceeded postings in the year.</p>
+      <div class="emd-tools">
+        <input class="emd-input" type="search" id="v-q" data-q="vendor" placeholder="Search vendor" aria-label="Search vendors">
+        <span class="emd-count" data-draw="vendor-count" data-source="vendors">—</span>
+      </div>
+      <div class="emd-tablebox">
+        <table class="emd-table" data-source="vendors" data-row-key="vendor">
+          <thead><tr>
+            <th data-field="vendor"><button class="emd-sort" data-t="vendor" data-k="vendor">Vendor</button></th>
+            <th class="num" data-field="actual_spend"><button class="emd-sort" data-t="vendor" data-k="actual_spend">Actual booked</button></th>
+            <th class="num" data-field="open_po_value"><button class="emd-sort" data-t="vendor" data-k="open_po_value">Open PO value</button></th>
+            <th class="num" data-field="po_count"><button class="emd-sort" data-t="vendor" data-k="po_count">POs</button></th>
+          </tr></thead>
+          <tbody data-draw="vendor-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== REGISTER ===================== -->
+  <section class="emd-page" id="register" hidden>
+    <div class="emd-card" id="register-card">
+      <h2>Transaction register, FY 2026-27</h2>
+      <p class="emd-note">Every FM line posted to fund centre 135080 this year, from the SAP document journal of each commitment item. Amounts in ₹ as posted; a minus is a reduction. Use Download CSV to take the filtered lines into Excel.</p>
+      <div class="emd-tools">
+        <select class="emd-input" id="reg-ci" data-draw="reg-ci" data-source="budget_items" aria-label="Commitment item"></select>
+        <select class="emd-input" id="reg-vt" aria-label="Value type">
+          <option value="">All value types</option>
+          <option value="Purchase requisition">Purchase requisitions</option>
+          <option value="Purchase order">Purchase orders</option>
+          <option value="Invoice / GR">Invoices / GRs</option>
+        </select>
+        <select class="emd-input" id="reg-m" aria-label="Month">
+          <option value="">All months</option>
+          <option>Apr 2026</option><option>May 2026</option><option>Jun 2026</option><option>Jul 2026</option><option>Aug 2026</option><option>Sep 2026</option><option>Oct 2026</option>
+        </select>
+        <input class="emd-input" type="search" id="reg-q" data-q="reg" placeholder="Search document, vendor, text" aria-label="Search transactions">
+        <button class="emd-btn" id="reg-csv" type="button">Download CSV</button>
+      </div>
+      <p class="emd-count" data-draw="reg-count" data-source="transactions">—</p>
+      <div class="emd-tablebox">
+        <table class="emd-table" data-source="transactions" data-row-key="line">
+          <thead><tr>
+            <th data-field="fm_posting_date"><button class="emd-sort" data-t="reg" data-k="fm_posting_date">FM posting date</button></th>
+            <th data-field="commitment_item"><button class="emd-sort" data-t="reg" data-k="commitment_item">Commitment item</button></th>
+            <th data-field="value_type"><button class="emd-sort" data-t="reg" data-k="value_type">Value type</button></th>
+            <th data-field="transaction"><button class="emd-sort" data-t="reg" data-k="transaction">Transaction</button></th>
+            <th data-field="document"><button class="emd-sort" data-t="reg" data-k="document">Document</button></th>
+            <th data-field="item"><button class="emd-sort" data-t="reg" data-k="item">Item</button></th>
+            <th data-field="predecessor"><button class="emd-sort" data-t="reg" data-k="predecessor">Predecessor</button></th>
+            <th data-field="amount_type"><button class="emd-sort" data-t="reg" data-k="amount_type">Amount type</button></th>
+            <th class="num" data-field="amount"><button class="emd-sort" data-t="reg" data-k="amount">Amount (₹)</button></th>
+            <th data-field="vendor"><button class="emd-sort" data-t="reg" data-k="vendor">Vendor</button></th>
+            <th data-field="description"><button class="emd-sort" data-t="reg" data-k="description">Text</button></th>
+            <th data-field="carried_from_fy25"><button class="emd-sort" data-t="reg" data-k="carried_from_fy25">From FY25</button></th>
+            <th data-field="tcode"><button class="emd-sort" data-t="reg" data-k="tcode">T-code</button></th>
+          </tr></thead>
+          <tbody data-draw="reg-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <p class="emd-foot">Source: SAP (JSW Dolvi) FMAVCR01 annual values and the FM document journal for every commitment item of fund centre 135080, fund DOLVI, fiscal year 2026 (Apr 2026–Mar 2027), exported on 28 Oct 2026. RENT_OTHERS has a ₹10 budget and no postings. Figures are a fixed snapshot; to refresh, re-export the journals and rebuild the data files (see README).</p>
+</div>
+
+<script>
+/* ---------- calculations ---------- */
+dash.calc('totals', {
+  inputs: ['budget_items'],
+  title: 'Fund centre totals',
+  description: 'Sums the commitment items; shares are each total divided by the budget; items at 90% or more are counted.',
+  fn: (budget_items) => {
+    const sum = (k) => budget_items.reduce((a, r) => a + Number(r[k] || 0), 0);
+    const t = { budget: sum('budget'), consumed: sum('consumed'), available: sum('available'), actual: sum('actual'), open_po: sum('open_po'), open_pr: sum('open_pr'), carried_forward: sum('carried_forward'), fresh_fy26: sum('fresh_fy26') };
+    t.utilised = t.consumed / t.budget;
+    t.available_share = t.available / t.budget;
+    t.actual_share = t.actual / t.budget;
+    t.items = budget_items.length;
+    t.items_at_90 = budget_items.filter((r) => r.budget > 1000 && r.consumed / r.budget >= 0.9).length;
+    const top = budget_items.slice().sort((a, b) => b.available - a.available)[0];
+    t.most_headroom_item = top.commitment_item;
+    t.most_headroom_value = top.available;
+    return [t];
+  }
+});
+dash.calc('item_status', {
+  inputs: ['budget_items'],
+  title: 'Utilisation by item',
+  description: 'Consumed ÷ budget per commitment item; 99% or more is Exhausted, 90% or more is Tight.',
+  fn: (budget_items) => budget_items.map((r) => {
+    const u = r.budget > 0 ? r.consumed / r.budget : 0;
+    return { ...r, utilised: u, status: r.consumed === 0 ? 'Unused' : u >= 0.99 ? 'Exhausted' : u >= 0.9 ? 'Tight' : 'Headroom' };
+  })
+});
+dash.calc('po_aging', {
+  inputs: ['open_pos'], title: 'Open POs by age', description: 'Counts open POs and sums their open value per age bucket.',
+  fn: (open_pos) => ['0–30 days', '31–90 days', '91–180 days', 'Over 180 days'].map((b) => { const rs = open_pos.filter((r) => r.age_bucket === b); return { age_bucket: b, documents: rs.length, open_value: rs.reduce((a, r) => a + r.open_value, 0) }; })
+});
+dash.calc('pr_aging', {
+  inputs: ['open_prs'], title: 'Open PRs by age', description: 'Counts open PRs and sums their open value per age bucket.',
+  fn: (open_prs) => ['0–30 days', '31–90 days', '91–180 days', 'Over 180 days'].map((b) => { const rs = open_prs.filter((r) => r.age_bucket === b); return { age_bucket: b, documents: rs.length, open_value: rs.reduce((a, r) => a + r.open_value, 0) }; })
+});
+
+/* ---------- helpers ---------- */
+const TIGHT = 0.9, EXHAUSTED = 0.99;
+const nf2 = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const nf0 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
+const cr = (v) => '₹' + nf2.format(v / 1e7) + ' Cr';
+const lakh = (v) => nf2.format(v / 1e5);
+const inr = (v) => nf2.format(v);
+const pct = (v) => (v * 100).toFixed(1) + '%';
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const dfmt = (s) => { if (!s) return ''; const [y, m, d] = s.split('-'); return `${Number(d)} ${MON[Number(m) - 1]} ${y}`; };
+const css = (name) => getComputedStyle(document.getElementById('dash-root') || document.documentElement).getPropertyValue(name).trim();
+const C = () => ({ actual: dash.colors[0], po: dash.colors[1], pr: dash.colors[2] });
+const one = (id) => { const g = dash.data(id); return g.status === 'ok' && g.data && g.data.length ? g.data : null; };
+const failLine = (el, id) => {
+  const g = dash.data(id);
+  if (g.status !== 'error') return false;
+  el.replaceChildren();
+  const box = document.createElement('div');
+  box.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;min-height:80px;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)';
+  const dot = document.createElement('span'); dot.style.cssText = 'width:.375rem;height:.375rem;border-radius:50%;background:var(--color-bad)';
+  box.append(dot, document.createTextNode('Failed to load'));
+  el.append(box);
+  return true;
+};
+const textDraw = (name, src, f) => dash.draw(name, (el) => {
+  const rows = one(src);
+  el.textContent = rows ? f(rows) : '—';
+});
+const mk = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+
+/* tooltip */
+const tipFor = (host) => {
+  const get = () => {
+    let tip = host.querySelector(':scope > .emd-tip');
+    if (!tip) { tip = mk('div', 'emd-tip'); tip.hidden = true; host.append(tip); }
+    return tip;
+  };
+  return {
+    show(ev, head, lines) {
+      const tip = get();
+      tip.replaceChildren(mk('div', 'emd-tip-h', head));
+      lines.forEach(([color, label, val]) => {
+        const r = mk('div', 'emd-tip-r');
+        if (color) { const s = mk('span', 'emd-sw'); s.style.background = color; r.append(s); }
+        if (label) r.append(document.createTextNode(label + '  '));
+        r.append(mk('b', null, val));
+        tip.append(r);
+      });
+      tip.hidden = false;
+      const hb = host.getBoundingClientRect();
+      const tw = tip.offsetWidth, th = tip.offsetHeight;
+      let x = ev.clientX - hb.left + 12, y = ev.clientY - hb.top - th - 8;
+      if (x + tw > hb.width) x = Math.max(0, ev.clientX - hb.left - tw - 12);
+      if (y < 0) y = ev.clientY - hb.top + 14;
+      tip.style.left = x + 'px'; tip.style.top = y + 'px';
+    },
+    hide() { const tip = host.querySelector(':scope > .emd-tip'); if (tip) tip.hidden = true; }
+  };
+};
+
+/* ---------- tabs ---------- */
+const showPage = (id) => {
+  document.querySelectorAll('.emd-page').forEach((s) => { s.hidden = s.id !== id; });
+  document.querySelectorAll('.emd-tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === id)));
+  dash.setLink(id);
+};
+document.querySelectorAll('.emd-tab').forEach((t) => t.addEventListener('click', () => showPage(t.dataset.tab)));
+{
+  const h = location.hash.slice(1);
+  const target = h && document.getElementById(h);
+  if (target && target.classList.contains('emd-page')) showPage(h);
+}
+
+/* ---------- headline text ---------- */
+textDraw('t-consumed', 'totals', (r) => cr(r[0].consumed));
+textDraw('t-budget', 'totals', (r) => cr(r[0].budget));
+textDraw('t-util', 'totals', (r) => pct(r[0].utilised));
+textDraw('t-avail', 'totals', (r) => cr(r[0].available));
+textDraw('t-actual-share', 'totals', (r) => pct(r[0].actual_share));
+textDraw('t-tight', 'totals', (r) => String(r[0].items_at_90));
+textDraw('t-nitems', 'totals', (r) => String(r[0].items));
+textDraw('t-top', 'totals', (r) => `${r[0].most_headroom_item} (${cr(r[0].most_headroom_value)})`);
+textDraw('k-budget', 'totals', (r) => cr(r[0].budget));
+textDraw('k-consumed', 'totals', (r) => cr(r[0].consumed));
+textDraw('k-consumed-s', 'totals', (r) => pct(r[0].utilised));
+textDraw('k-avail', 'totals', (r) => cr(r[0].available));
+textDraw('k-avail-s', 'totals', (r) => pct(r[0].available_share));
+textDraw('k-actual', 'totals', (r) => cr(r[0].actual));
+textDraw('k-actual-s', 'totals', (r) => pct(r[0].actual_share));
+textDraw('k-po', 'totals', (r) => cr(r[0].open_po));
+textDraw('k-pr', 'totals', (r) => cr(r[0].open_pr));
+textDraw('k-po-n', 'po_aging', (r) => nf0.format(r.reduce((a, x) => a + x.documents, 0)));
+textDraw('k-pr-n', 'pr_aging', (r) => nf0.format(r.reduce((a, x) => a + x.documents, 0)));
+dash.draw('thr-note', (el) => { el.textContent = `Exhausted at ${Math.round(EXHAUSTED * 100)}% or more, tight at ${Math.round(TIGHT * 100)}% or more.`; });
+
+/* ---------- legends ---------- */
+const legend = (el, items) => {
+  el.replaceChildren(...items.map(([color, label]) => { const li = mk('li'); const s = mk('span', 'emd-sw'); s.style.background = color; li.append(s, document.createTextNode(label)); return li; }));
+};
+dash.draw('stage-legend', (el) => { const c = C(); legend(el, [[c.actual, 'Actual booked'], [c.po, 'Open PO'], [c.pr, 'Open PR'], ['var(--cds-chart-grid)', 'Available']]); });
+dash.draw('month-legend', (el) => { const c = C(); legend(el, [[c.actual, 'Actuals booked (net)'], [c.po, 'New PO value'], [c.pr, 'New PR value']]); });
+dash.draw('vendor-legend', (el) => { const c = C(); legend(el, [[c.actual, 'Actual booked'], [c.po, 'Open PO value']]); });
+
+/* ---------- composition bar ---------- */
+dash.draw('composition', (el) => {
+  if (failLine(el, 'totals')) return;
+  const rows = one('totals');
+  if (!rows) { el.replaceChildren(); return; }
+  const t = rows[0], c = C();
+  const parts = [['Actual booked', t.actual, c.actual], ['Open PO', t.open_po, c.po], ['Open PR', t.open_pr, c.pr], ['Available', t.available, null]];
+  const tip = tipFor(el);
+  const bar = mk('div', 'emd-stack');
+  parts.forEach(([label, v, color]) => {
+    const s = mk('div', 'emd-seg');
+    s.style.width = (Math.max(0, v) / t.budget * 100) + '%';
+    if (color) s.style.background = color;
+    s.addEventListener('mousemove', (ev) => tip.show(ev, label, [[color, '', `${cr(v)} · ${pct(v / t.budget)}`]]));
+    s.addEventListener('mouseleave', () => tip.hide());
+    bar.append(s);
+  });
+  const leg = mk('div', 'emd-stack-legend');
+  parts.forEach(([label, v, color]) => {
+    const it = mk('div', 'emd-stack-item');
+    const top = mk('span'); const sw = mk('span', 'emd-sw'); sw.style.background = color || 'var(--cds-chart-grid)'; sw.style.marginRight = '6px';
+    top.append(sw, document.createTextNode(label));
+    it.append(top, mk('strong', null, cr(v)), mk('span', null, pct(v / t.budget) + ' of budget'));
+    leg.append(it);
+  });
+  el.replaceChildren(bar, leg);
+  bar.style.marginBottom = '14px';
+});
+
+/* ---------- items stacked bars ---------- */
+dash.draw('items-bars', (el) => {
+  if (failLine(el, 'budget_items')) return;
+  const rows = one('budget_items');
+  if (!rows) { el.replaceChildren(); return; }
+  const c = C(); const tip = tipFor(el);
+  const list = mk('div', 'emd-rows');
+  rows.filter((r) => r.budget > 1000).sort((a, b) => b.budget - a.budget).forEach((r) => {
+    const row = mk('div', 'emd-row');
+    const name = mk('span', 'emd-row-name', r.commitment_item); name.title = r.commitment_item;
+    const track = mk('div', 'emd-track');
+    [['Actual booked', r.actual, c.actual], ['Open PO', r.open_po, c.po], ['Open PR', r.open_pr, c.pr]].forEach(([label, v, color]) => {
+      const s = mk('div', 'emd-seg'); s.style.width = (Math.max(0, v) / r.budget * 100) + '%'; s.style.background = color; track.append(s);
+    });
+    track.addEventListener('mousemove', (ev) => tip.show(ev, `${r.commitment_item} · budget ${cr(r.budget)}`, [
+      [c.actual, 'Actual booked', cr(r.actual)], [c.po, 'Open PO', cr(r.open_po)], [c.pr, 'Open PR', cr(r.open_pr)], [null, 'Available', cr(r.available)]]));
+    track.addEventListener('mouseleave', () => tip.hide());
+    const val = mk('span', 'emd-row-val');
+    const u = r.consumed / r.budget;
+    const b = mk('b', null, pct(u));
+    if (u >= EXHAUSTED) b.style.color = 'var(--color-bad)'; else if (u >= TIGHT) b.style.color = 'var(--color-warn)';
+    val.append(b, document.createTextNode(' · ' + cr(r.budget)));
+    row.append(name, track, val);
+    list.append(row);
+  });
+  el.replaceChildren(list);
+});
+
+/* ---------- monthly grouped bars ---------- */
+dash.draw('monthly', (el) => {
+  if (failLine(el, 'monthly')) return;
+  const rows = one('monthly');
+  if (!rows) { el.replaceChildren(); return; }
+  const c = C();
+  const series = [['actual_booked', 'Actuals booked (net)', c.actual], ['new_po_value', 'New PO value', c.po], ['new_pr_value', 'New PR value', c.pr]];
+  const W = Math.max(280, el.clientWidth || 600), H = 260;
+  const yMax = d3.max(rows, (r) => d3.max(series, ([k]) => r[k])) / 1e7;
+  const y = d3.scaleLinear([0, yMax], [H - 26, 10]).nice();
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = d3.create('svg').attr('class', 'emd-svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Monthly actuals, new PO and new PR value');
+  const ticks = y.ticks(5);
+  const probe = svg.append('text').text('₹' + ticks[ticks.length - 1] + ' Cr');
+  el.replaceChildren(svg.node());
+  const ml = Math.ceil(probe.node().getComputedTextLength()) + 10; probe.remove();
+  const x = d3.scaleBand(rows.map((r) => r.month), [ml, W - 6]).padding(0.22);
+  const xi = d3.scaleBand(series.map((s) => s[0]), [0, x.bandwidth()]).padding(0.08);
+  svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', ml).attr('x2', W - 6).attr('y1', (d) => y(d)).attr('y2', (d) => y(d)).style('stroke', 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(ticks).join('text').attr('x', ml - 6).attr('y', (d) => y(d) + 4).attr('text-anchor', 'end').text((d) => '₹' + d + ' Cr');
+  const narrow = W < 460;
+  svg.append('g').selectAll('text').data(rows).join('text').attr('x', (r) => x(r.month) + x.bandwidth() / 2).attr('y', H - 8).attr('text-anchor', 'middle').text((r) => narrow ? r.month.slice(0, 3) : r.month);
+  const tip = tipFor(el);
+  const g = svg.append('g').selectAll('g').data(rows).join('g').attr('transform', (r) => `translate(${x(r.month)},0)`);
+  g.selectAll('rect').data((r) => series.map(([k, label, color]) => ({ r, k, label, color, v: r[k] / 1e7 }))).join('rect')
+    .attr('x', (d) => xi(d.k)).attr('width', Math.min(32, xi.bandwidth())).attr('y', (d) => y(Math.max(0, d.v))).attr('height', (d) => Math.abs(y(0) - y(d.v))).attr('rx', 2).style('fill', (d) => d.color);
+  g.append('rect').attr('x', 0).attr('y', 0).attr('width', x.bandwidth()).attr('height', H - 26).style('fill', 'transparent')
+    .on('mousemove', (ev, r) => tip.show(ev, r.month, [
+      [c.actual, 'Actuals booked', cr(r.actual_booked)], [c.po, `New PO value (${r.new_pos} POs)`, cr(r.new_po_value)], [c.pr, `New PR value (${r.new_prs} PRs)`, cr(r.new_pr_value)], [null, 'Invoices posted', String(r.invoices)], [null, 'Cumulative actuals', cr(r.cumulative_actual)]]))
+    .on('mouseleave', () => tip.hide());
+  svg.append('line').attr('x1', ml).attr('x2', W - 6).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'var(--cds-chart-axis)');
+});
+
+/* ---------- carry-forward ---------- */
+dash.draw('carry', (el) => {
+  if (failLine(el, 'totals')) return;
+  const rows = one('totals');
+  if (!rows) { el.replaceChildren(); return; }
+  const t = rows[0], c = C(), tip = tipFor(el);
+  const parts = [['Carried from FY 2025-26', t.carried_forward, c.po], ['Fresh FY 2026-27', t.fresh_fy26, c.actual]];
+  const bar = mk('div', 'emd-stack'); bar.style.marginBottom = '14px';
+  parts.forEach(([label, v, color]) => {
+    const s = mk('div', 'emd-seg'); s.style.width = (v / t.consumed * 100) + '%'; s.style.background = color;
+    s.addEventListener('mousemove', (ev) => tip.show(ev, label, [[color, '', `${cr(v)} · ${pct(v / t.consumed)} of consumed`]]));
+    s.addEventListener('mouseleave', () => tip.hide());
+    bar.append(s);
+  });
+  const leg = mk('div', 'emd-stack-legend');
+  parts.forEach(([label, v, color]) => {
+    const it = mk('div', 'emd-stack-item'); const top = mk('span'); const sw = mk('span', 'emd-sw'); sw.style.background = color; sw.style.marginRight = '6px';
+    top.append(sw, document.createTextNode(label));
+    it.append(top, mk('strong', null, cr(v)), mk('span', null, pct(v / t.consumed) + ' of consumed'));
+    leg.append(it);
+  });
+  el.replaceChildren(bar, leg);
+});
+
+/* ---------- utilisation cell ---------- */
+const ubar = (u) => {
+  const w = mk('div', 'emd-ubar'); const tr = mk('div', 'emd-ubar-track'); const f = mk('div', 'emd-ubar-fill');
+  f.style.width = Math.min(100, u * 100) + '%';
+  f.style.background = u >= EXHAUSTED ? 'var(--cds-chart-status-critical)' : u >= TIGHT ? 'var(--color-warn)' : dash.colors[0];
+  tr.append(f); const l = mk('span', null, pct(u)); l.style.minWidth = '3.2rem'; l.style.textAlign = 'right';
+  w.append(tr, l); return w;
+};
+const chip = (s) => mk('span', 'emd-chip ' + (s === 'Exhausted' ? 'bad' : s === 'Tight' ? 'warn' : 'ok'), s);
+
+/* watch list */
+dash.draw('watch-rows', (el) => {
+  const rows = one('item_status');
+  if (!rows) { el.replaceChildren(); return; }
+  el.replaceChildren(...rows.filter((r) => r.consumed > 0).sort((a, b) => b.utilised - a.utilised).map((r) => {
+    const tr = mk('tr'); tr.dataset.key = r.commitment_item;
+    const a = mk('td', null, r.commitment_item); const u = mk('td'); u.append(ubar(r.utilised));
+    const av = mk('td', 'num', lakh(r.available)); const s = mk('td'); s.append(chip(r.status));
+    tr.append(a, u, av, s); return tr;
+  }));
+});
+
+/* ---------- sortable / searchable tables ---------- */
+const state = {
+  items: { k: 'budget', dir: -1 }, po: { k: 'open_value', dir: -1, q: '' }, pr: { k: 'open_value', dir: -1, q: '' },
+  vendor: { k: 'actual_spend', dir: -1, q: '' }, reg: { k: 'fm_posting_date', dir: 1, q: '', ci: '', vt: '', m: '' }
+};
+const drawFor = { items: 'items-rows', po: 'po-rows', pr: 'pr-rows', vendor: 'vendor-rows', reg: 'reg-rows' };
+const countFor = { po: 'po-count', pr: 'pr-count', vendor: 'vendor-count', reg: 'reg-count' };
+const sorter = (st) => (a, b) => {
+  const x = a[st.k], y = b[st.k];
+  if (typeof x === 'number' && typeof y === 'number') return (x - y) * st.dir;
+  return String(x ?? '').localeCompare(String(y ?? '')) * st.dir;
+};
+const syncSortHeads = () => {
+  document.querySelectorAll('.emd-sort[data-t]').forEach((b) => {
+    const st = state[b.dataset.t]; const th = b.closest('th');
+    if (th) th.setAttribute('aria-sort', st.k === b.dataset.k ? (st.dir > 0 ? 'ascending' : 'descending') : 'none');
+  });
+};
+document.querySelectorAll('.emd-sort[data-t]').forEach((b) => b.addEventListener('click', () => {
+  const st = state[b.dataset.t];
+  if (st.k === b.dataset.k) st.dir = -st.dir; else { st.k = b.dataset.k; st.dir = ['commitment_item', 'vendor', 'description', 'po_number', 'pr_number', 'value_type', 'transaction', 'document', 'amount_type', 'tcode', 'fm_posting_date', 'doc_date', 'status', 'carried_from_fy25', 'item', 'predecessor'].includes(b.dataset.k) ? 1 : -1; }
+  syncSortHeads();
+  dash.draw(drawFor[b.dataset.t]);
+}));
+syncSortHeads();
+document.querySelectorAll('.emd-input[data-q]').forEach((inp) => inp.addEventListener('input', () => {
+  const t = inp.dataset.q; state[t].q = inp.value.trim().toLowerCase();
+  dash.draw(drawFor[t]); if (countFor[t]) dash.draw(countFor[t]);
+}));
+[['reg-vt', 'vt'], ['reg-m', 'm'], ['reg-ci', 'ci']].forEach(([id, key]) => {
+  const s = document.getElementById(id);
+  if (s) s.addEventListener('change', () => { state.reg[key] = s.value; dash.draw('reg-rows'); dash.draw('reg-count'); });
+});
+const match = (r, q, keys) => !q || keys.some((k) => String(r[k] ?? '').toLowerCase().includes(q));
+const td = (text, cls) => mk('td', cls, text);
+const money = (v, f) => { const c = td(f(v), 'num'); if (v < 0) c.classList.add('emd-neg'); return c; };
+
+dash.draw('items-rows', (el) => {
+  const rows = one('item_status');
+  if (!rows) { el.replaceChildren(); return; }
+  el.replaceChildren(...rows.slice().sort(sorter(state.items)).map((r) => {
+    const tr = mk('tr'); tr.dataset.key = r.commitment_item;
+    const u = mk('td'); u.append(ubar(r.utilised)); const s = mk('td'); s.append(chip(r.status));
+    tr.append(td(r.commitment_item), money(r.budget, lakh), money(r.consumed, lakh), money(r.available, lakh), u, money(r.actual, lakh), money(r.open_po, lakh), money(r.open_pr, lakh), money(r.carried_forward, lakh), s);
+    return tr;
+  }));
+});
+dash.draw('items-foot', (el) => {
+  const rows = one('totals');
+  if (!rows) { el.replaceChildren(); return; }
+  const t = rows[0]; const tr = mk('tr'); tr.style.fontWeight = '600';
+  const u = mk('td'); u.append(ubar(t.utilised));
+  tr.append(td('Total, fund centre 135080'), td(lakh(t.budget), 'num'), td(lakh(t.consumed), 'num'), td(lakh(t.available), 'num'), u, td(lakh(t.actual), 'num'), td(lakh(t.open_po), 'num'), td(lakh(t.open_pr), 'num'), td(lakh(t.carried_forward), 'num'), td(''));
+  el.replaceChildren(tr);
+});
+
+const poKeys = ['po_number', 'vendor', 'commitment_item', 'description'];
+dash.draw('po-rows', (el) => {
+  const rows = one('open_pos');
+  if (!rows) { el.replaceChildren(); return; }
+  el.replaceChildren(...rows.filter((r) => match(r, state.po.q, poKeys)).sort(sorter(state.po)).map((r) => {
+    const tr = mk('tr'); tr.dataset.key = r.po_number;
+    tr.append(td(r.po_number, 'mono'), td(r.vendor), td(r.commitment_item), td(r.description, 'wrap'), td(dfmt(r.doc_date)), td(nf0.format(r.age_days), 'num'), money(r.open_value, lakh), td(r.carried_from_fy25));
+    return tr;
+  }));
+});
+dash.draw('po-count', (el) => {
+  const rows = one('open_pos'); if (!rows) { el.textContent = '—'; return; }
+  const f = rows.filter((r) => match(r, state.po.q, poKeys));
+  el.textContent = `${nf0.format(f.length)} POs · ${cr(f.reduce((a, r) => a + r.open_value, 0))} open`;
+});
+const prKeys = ['pr_number', 'commitment_item', 'description'];
+dash.draw('pr-rows', (el) => {
+  const rows = one('open_prs');
+  if (!rows) { el.replaceChildren(); return; }
+  el.replaceChildren(...rows.filter((r) => match(r, state.pr.q, prKeys)).sort(sorter(state.pr)).map((r) => {
+    const tr = mk('tr'); tr.dataset.key = r.pr_number;
+    tr.append(td(r.pr_number, 'mono'), td(r.commitment_item), td(r.description, 'wrap'), td(dfmt(r.doc_date)), td(nf0.format(r.age_days), 'num'), money(r.open_value, lakh), td(r.carried_from_fy25));
+    return tr;
+  }));
+});
+dash.draw('pr-count', (el) => {
+  const rows = one('open_prs'); if (!rows) { el.textContent = '—'; return; }
+  const f = rows.filter((r) => match(r, state.pr.q, prKeys));
+  el.textContent = `${nf0.format(f.length)} PRs · ${cr(f.reduce((a, r) => a + r.open_value, 0))} open`;
+});
+
+/* aging bars */
+const agingDraw = (name, src, color) => dash.draw(name, (el) => {
+  if (failLine(el, src)) return;
+  const rows = one(src);
+  if (!rows) { el.replaceChildren(); return; }
+  const max = d3.max(rows, (r) => r.open_value) || 1; const tip = tipFor(el);
+  const list = mk('div', 'emd-rows');
+  rows.forEach((r) => {
+    const row = mk('div', 'emd-row');
+    const tr = mk('div', 'emd-track'); tr.style.background = 'transparent';
+    const s = mk('div', 'emd-seg'); s.style.width = (r.open_value / max * 100) + '%'; s.style.background = r.age_bucket === 'Over 180 days' ? 'var(--cds-chart-status-critical)' : color(); s.style.borderRadius = '3px';
+    tr.append(s);
+    tr.addEventListener('mousemove', (ev) => tip.show(ev, r.age_bucket, [[null, 'Documents', nf0.format(r.documents)], [null, 'Open value', cr(r.open_value)]]));
+    tr.addEventListener('mouseleave', () => tip.hide());
+    const v = mk('span', 'emd-row-val'); v.append(mk('b', null, cr(r.open_value)), document.createTextNode(` · ${r.documents}`));
+    row.append(mk('span', 'emd-row-name', r.age_bucket), tr, v);
+    list.append(row);
+  });
+  el.replaceChildren(list);
+});
+agingDraw('po-aging', 'po_aging', () => C().po);
+agingDraw('pr-aging', 'pr_aging', () => C().pr);
+
+/* vendors */
+dash.draw('vendor-bars', (el) => {
+  if (failLine(el, 'vendors')) return;
+  const rows = one('vendors');
+  if (!rows) { el.replaceChildren(); return; }
+  const c = C(); const tip = tipFor(el);
+  const top = rows.slice().sort((a, b) => (b.actual_spend + b.open_po_value) - (a.actual_spend + a.open_po_value)).slice(0, 15);
+  const max = d3.max(top, (r) => Math.max(0, r.actual_spend) + Math.max(0, r.open_po_value)) || 1;
+  const list = mk('div', 'emd-rows');
+  top.forEach((r) => {
+    const row = mk('div', 'emd-row'); const name = mk('span', 'emd-row-name', r.vendor); name.title = r.vendor;
+    const tr = mk('div', 'emd-track'); tr.style.background = 'transparent';
+    [[r.actual_spend, c.actual], [r.open_po_value, c.po]].forEach(([v, col]) => { const s = mk('div', 'emd-seg'); s.style.width = (Math.max(0, v) / max * 100) + '%'; s.style.background = col; tr.append(s); });
+    tr.addEventListener('mousemove', (ev) => tip.show(ev, r.vendor, [[c.actual, 'Actual booked', cr(r.actual_spend)], [c.po, 'Open PO value', cr(r.open_po_value)], [null, 'POs', String(r.po_count)]]));
+    tr.addEventListener('mouseleave', () => tip.hide());
+    const v = mk('span', 'emd-row-val'); v.append(mk('b', null, cr(r.actual_spend + r.open_po_value)));
+    row.append(name, tr, v); list.append(row);
+  });
+  el.replaceChildren(list);
+});
+dash.draw('vendor-rows', (el) => {
+  const rows = one('vendors');
+  if (!rows) { el.replaceChildren(); return; }
+  el.replaceChildren(...rows.filter((r) => match(r, state.vendor.q, ['vendor'])).sort(sorter(state.vendor)).map((r) => {
+    const tr = mk('tr'); tr.dataset.key = r.vendor;
+    tr.append(td(r.vendor), money(r.actual_spend, lakh), money(r.open_po_value, lakh), td(nf0.format(r.po_count), 'num'));
+    return tr;
+  }));
+});
+dash.draw('vendor-count', (el) => {
+  const rows = one('vendors'); if (!rows) { el.textContent = '—'; return; }
+  el.textContent = `${nf0.format(rows.filter((r) => match(r, state.vendor.q, ['vendor'])).length)} vendors`;
+});
+
+/* register */
+const REG_LIMIT = 600;
+const regKeys = ['document', 'vendor', 'description', 'predecessor', 'commitment_item', 'tcode'];
+const regFilter = (rows) => rows.filter((r) => (!state.reg.ci || r.commitment_item === state.reg.ci) && (!state.reg.vt || r.value_type === state.reg.vt) && (!state.reg.m || r.month === state.reg.m) && match(r, state.reg.q, regKeys));
+dash.draw('reg-ci', (sel) => {
+  const g = dash.data('budget_items');
+  const items = g.status === 'ok' ? g.data.filter((r) => r.consumed !== 0).map((r) => r.commitment_item) : [];
+  sel.replaceChildren(new Option('All commitment items', ''), ...items.map((n) => new Option(n, n)));
+  sel.value = state.reg.ci;
+});
+dash.draw('reg-rows', (el) => {
+  const rows = one('transactions');
+  if (!rows) { el.replaceChildren(); return; }
+  el.replaceChildren(...regFilter(rows).sort(sorter(state.reg)).slice(0, REG_LIMIT).map((r) => {
+    const tr = mk('tr'); tr.dataset.key = String(r.line);
+    tr.append(td(dfmt(r.fm_posting_date)), td(r.commitment_item), td(r.value_type), td(r.transaction), td(r.document, 'mono'), td(r.item, 'num'), td(r.predecessor, 'mono'), td(r.amount_type), money(r.amount, inr), td(r.vendor), td(r.description, 'wrap'), td(r.carried_from_fy25), td(r.tcode));
+    return tr;
+  }));
+});
+dash.draw('reg-count', (el) => {
+  const rows = one('transactions'); if (!rows) { el.textContent = '—'; return; }
+  const f = regFilter(rows); const total = f.reduce((a, r) => a + r.amount, 0);
+  el.textContent = `${nf0.format(f.length)} lines · net ₹${inr(total)}` + (f.length > REG_LIMIT ? ` · showing the first ${nf0.format(REG_LIMIT)} in this order; narrow the filters or sort to see others` : '');
+});
+
+/* CSV download of the filtered register */
+{
+  const btn = document.getElementById('reg-csv');
+  if (btn) btn.addEventListener('click', () => {
+    const rows = one('transactions'); if (!rows) return;
+    const f = regFilter(rows).sort(sorter(state.reg));
+    const cols = ['fm_posting_date', 'month', 'commitment_item', 'value_type', 'transaction', 'document', 'item', 'predecessor', 'amount_type', 'amount', 'vendor', 'description', 'carried_from_fy25', 'tcode'];
+    const esc = (v) => { const s = String(v ?? ''); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+    const text = '\ufeff' + [cols.join(','), ...f.map((r) => cols.map((c) => esc(r[c])).join(','))].join('\r\n');
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'emd-135080-fy2026-27-transactions.csv';
+    document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+}
+</script>
+</div>
+<script>window.__dashStart();</script>
+</body>
+</html>

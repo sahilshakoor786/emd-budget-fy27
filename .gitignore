@@ -1,0 +1,8 @@
+# raw SAP exports stay on the office PC
+sap_exports/*.txt
+sap_exports/*.json
+!sap_exports/README.md
+__pycache__/
+.DS_Store
+.vercel
+!sap_exports/conference.json
