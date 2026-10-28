@@ -21,15 +21,16 @@ Budget, consumed and available match SAP **FMAVCR01** (Display Annual Values of 
 ## Structure
 
 ```
-index.html        page, styles and chart code
-runtime.js        small loader that reads /data and draws the page
-vendor/d3.min.js  d3 v7.9.0 (bundled, no CDN needed)
-data/*.json       the snapshot (budget_items, monthly, open_pos, open_prs, vendors, transactions)
-scripts/          Python that turns SAP exports into data/*.json
-vercel.json       headers (noindex, no-cache on data)
+index.html                 GENERATED single file: page + d3 + runtime + all data inlined (what Vercel serves)
+src/index.template.html    page, styles and chart code (edit this, not index.html)
+runtime.js                 small loader that draws the page from the embedded data
+vendor/d3.min.js           d3 v7.9.0
+data/*.json                the snapshot (budget_items, monthly, open_pos, open_prs, vendors, transactions)
+scripts/                   Python: SAP exports -> data/*.json, and bundle.py -> index.html
+vercel.json                headers (noindex)
 ```
 
-No build step: Vercel serves the folder as a static site.
+`index.html` works on its own: it can be opened by double-clicking or hosted anywhere. No build step on Vercel.
 
 ## Refreshing the numbers
 
@@ -44,11 +45,8 @@ No build step: Vercel serves the folder as a static site.
    python ../scripts/datasets.py
    ```
    The scripts assert that every commitment item's journal total equals its consumed amount.
-5. Update the snapshot date in `index.html`, commit and push. Vercel redeploys automatically.
+5. Update the snapshot date in `src/index.template.html`, then from the repo root run `python scripts/bundle.py` to regenerate `index.html`. Commit and push. Vercel redeploys automatically.
 
 ## Local preview
 
-```
-python -m http.server 8000
-```
-then open http://localhost:8000.
+Double-click `index.html`.

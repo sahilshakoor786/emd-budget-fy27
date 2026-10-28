@@ -58,13 +58,20 @@
   window.dash = dash;
   window.__dashStart = function () {
     drawAll();
+    const embedded = window.__EMD_DATA || null;
     DATASETS.forEach((id) => {
+      if (embedded && embedded[id]) {
+        const rows = embedded[id];
+        store[id] = { status: 'ok', data: rows, columns: rows.length ? Object.keys(rows[0]) : [] };
+        return;
+      }
       fetch(`data/${id}.json`, { cache: 'no-cache' })
         .then((r) => { if (!r.ok) throw new Error(r.status + ' ' + r.statusText); return r.json(); })
         .then((rows) => { store[id] = { status: 'ok', data: rows, columns: rows.length ? Object.keys(rows[0]) : [] }; })
         .catch((e) => { console.error(id, e); store[id] = { status: 'error', data: [], message: String(e) }; })
         .finally(() => { Object.values(calcs).forEach((c) => { c.cache = null; }); drawAll(); });
     });
+    if (embedded) drawAll();
     let t;
     let lastW = window.innerWidth;
     window.addEventListener('resize', () => {
